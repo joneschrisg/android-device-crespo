@@ -336,6 +336,8 @@ service b2gdialer /system/bin/b2g-dialer-daemon
 #    onrestart restart media
 #    onrestart restart netd
 
+service httpd /system/xbin/mongoose -p 7777 -t 3 -r / -m .appcache=text/cache-manifest,.mp4=video/mp4
+
 service b2g /system/b2g/b2g
 
 service media /system/bin/mediaserver
