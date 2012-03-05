@@ -20,7 +20,7 @@
 #
 
 # Get the long list of APNs
-PRODUCT_COPY_FILES := ../../vendor/apns-conf.xml:system/etc/apns-conf.xml
+PRODUCT_COPY_FILES := vendor/apns-conf.xml:system/etc/apns-conf.xml
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full.mk)
