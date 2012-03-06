@@ -303,11 +303,10 @@ on property:persist.service.adb.enable=1
 on property:persist.service.adb.enable=0
     stop adbd
 
-#service servicemanager /system/bin/servicemanager
-#    user system
-#    critical
-#    onrestart restart zygote
-#    onrestart restart media
+service servicemanager /system/bin/servicemanager
+    user system
+    critical
+    onrestart restart media
 
 service vold /system/bin/vold
     socket vold stream 0660 root mount
@@ -319,15 +318,10 @@ service netd /system/bin/netd
 service debuggerd /system/bin/debuggerd
 
 service ril-daemon /system/bin/rild
-    socket rild stream 660 root radio
+    socket rild stream 666 root radio
     socket rild-debug stream 660 radio system
     user root
     group radio cache inet misc audio sdcard_rw
-
-service b2gdialer /system/bin/b2g-dialer-daemon
-    socket rilb2g stream 666 root system
-    user root
-    group radio cache inet misc audio sdcard_rw net_admin net_raw log 
 
 #service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server
 #    socket zygote stream 666
@@ -336,9 +330,18 @@ service b2gdialer /system/bin/b2g-dialer-daemon
 #    onrestart restart media
 #    onrestart restart netd
 
-service httpd /system/xbin/mongoose -p 7777 -t 3 -r / -m .appcache=text/cache-manifest,.mp4=video/mp4
+service httpd /system/bin/busybox httpd -f -p 127.0.0.1:7777 -h /
+    user root
+    group inet cache misc net_admin net_raw log
+
+service rilproxy /system/bin/rilproxy
+    socket rilproxy stream 666 root system
+    socket rilproxyd stream 666 root system
+    user root
+    group radio cache inet misc audio sdcard_rw net_admin net_raw log
 
 service b2g /system/b2g/b2g
+    onrestart restart media
 
 service media /system/bin/mediaserver
     user media
